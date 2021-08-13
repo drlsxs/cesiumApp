@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cesium App</title>
+  <script src="../Cesium/Cesium.js"></script>
+  <link rel="stylesheet" href="../Cesium/Widgets/widgets.css">
+  <style>
+    html,body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div id="cesiumContainer" style="height: 100%;">
+
+</div>
+
+<script>
+  //先加上Ion 上申请的token
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyNDBjNWU2Ny0zNGQyLTQzYWEtYWY4MC1kYTAzNzliMDY3ODEiLCJpZCI6NjQwMTAsImlhdCI6MTYyODczOTMyOX0.6fIkKHrFW3SdFxDhxJyhp7cCldEhbBRbhlM1RSmnkI4';
+  var viewer = new Cesium.Viewer("cesiumContainer",{
+    //让地图出现地形
+    terrainProvider : Cesium.createWorldTerrain({
+      requestWaterMask : true,
+      requestVertexNormals : true
+    })
+  });
+  viewer.scene.globe.depthTestAgainstTerrain = true;
+
+  // 1. Set position with a top-down view
+  viewer.camera.setView({
+    //设置北京坐标
+    destination : Cesium.Cartesian3.fromDegrees(116.39, 39.9, 150.0),
+    //设置视角
+    orientation: {
+      heading : Cesium.Math.toRadians(90.0), //上空的视角方向
+      pitch : Cesium.Math.toRadians(-90),    // 左右的视角方向
+      roll : 0.0
+    }
+  });
+
+  // 设置让地图建筑改成成3d形状，并让地图客制化
+  var tileset = viewer.scene.primitives.add(
+    new Cesium.Cesium3DTileset({
+      url: Cesium.IonResource.fromAssetId(75343),
+    })
+  );
+
+  //设置3d建筑的颜色及透明度
+  // var transparentStyle = new Cesium.Cesium3DTileStyle({
+  //   color: "color('white',0.3)",
+  //   show: true
+  // });
+  //
+  // tileset.style = transparentStyle;
+
+  //根据高度设置3d建筑的颜色，给用户视觉效果
+  // tileset.style = new Cesium.Cesium3DTileStyle({
+  //   color : {
+  //     conditions : [
+  //       ['${Height} >= 100', 'color("purple", 0.5)'],
+  //       ['${Height} >= 50', 'color("red")'],
+  //       ['true', 'color("blue")']
+  //     ]
+  //   },
+  //   show : '${Height} > 0',
+  //   meta : {
+  //     description : '"Building id ${id} has height ${Height}."'
+  //   }
+  // });
+
+
+</script>
+
+</body>
+</html>
